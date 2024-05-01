@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 
+import { useStateContext } from "../context";
 import { money } from "../assets";
-import { CustomButton, FormField } from "../components";
+import { CustomButton, FormField, Loader } from "../components";
 import { checkIfImage } from "../utils";
 
 const CreateCampaign = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const { createCampaign } = useStateContext();
   const [form, setForm] = useState({
     name: "",
     title: "",
@@ -18,13 +20,51 @@ const CreateCampaign = () => {
     image: "",
   });
 
-  const handleFormFieldChange = (fileName, e) => {
-    setForm({ ...form, [fileName]: e.target.value });
+  const handleFormFieldChange = (fieldName, e) => {
+
+    // if(fieldName === "target"){
+    //   const target = e.target.value;
+    //   setForm({...form, [fieldName]: ethers.utils.parseEther(target,"ethers")});
+    // if(fieldName === "deadline"){
+    //   const date = new Date(e.target.value);
+    //   const formattedDate = date.toISOString().split("T")[0];
+    //   setForm({...form, [fieldName]: formattedDate});
+    // }else if(fieldName === "deadline"){
+    //   const date = new Date(e.target.value).getTime();
+    //   setForm({...form, [fieldName]: BigNumber.from(date)});
+    // }
+    // else{
+      setForm({ ...form, [fieldName]: e.target.value });
+    // }
+   
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
+    checkIfImage(form.image,async(exists)=>{
+      if(exists){
+        setIsLoading(true);
+        console.log(form);
+        await createCampaign(
+          {...form, 
+            title: form.title, 
+            description: form.description, 
+            target: ethers.utils.parseEther(form.target,18),
+            deadline: form.deadline,
+            image: form.image
+          
+          }
+        );
+        
+        setIsLoading(false);
+        navigate("/");
+      }else{
+        alert("Provide valid image URL");
+        setForm({...form, image:""})
+      }
+    });
+
+    
 
 
   };
@@ -34,7 +74,7 @@ const CreateCampaign = () => {
       className="bg-[#e9faedfd] flex justify-center items-center flex-col 
     rounded-[10px] sm:p-10 p-4"
     >
-      {isLoading && "Loading..."}
+      {isLoading && <Loader />}
       <div
         className="flex justify-center items-center p-[16px] sm:min-w-[380px]
     bg-[#cbfdd7fd] rounded-[10px]"
