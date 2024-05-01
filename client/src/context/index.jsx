@@ -4,7 +4,7 @@ import React, {useContext, createContext} from "react";
 import {useAddress, useContract, useMetamask,
 useContractWrite,
 } from '@thirdweb-dev/react';
-import {ethers} from 'ethers';
+import {BigNumber, ethers} from 'ethers';
 
 const StateContext = createContext();
 const contractAddress = "0x99D9260fF6FeF6332b5D83e70907b76a68c0611C";
@@ -51,7 +51,7 @@ export const StateContextProvider = ({children}) => {
                 deadline: campaign.deadline.toNumber(),
                 amountCollected: ethers.utils.formatEther(campaign.amountCollected.toString()),
                 image: campaign.image,
-                cId: i
+                cId: BigNumber.from(i)
             
         }));
         
@@ -69,6 +69,32 @@ export const StateContextProvider = ({children}) => {
     }
 
 
+    const donate = async (cId, amount)=>{
+        const data = await contract.call('donateToCampaign', [cId], {
+            value: ethers.utils.parseEther(amount)
+        });
+
+
+        return data;
+    }
+
+    const getDonations = async (cId) => {
+        const donations = await contract.call('getDonators', [cId]);
+        const numberOfDonations = donations[0].length;
+
+        const parsedDonations = [];
+
+        for(let i=0; i<numberOfDonations; i++){
+            parsedDonations.push({
+                donator: donations[0][i],
+                donation: ethers.utils.formatEther(donations[1][i].toString())
+            });
+        }
+
+        return parsedDonations;
+    }
+
+
     return(
         <StateContext.Provider value={{
             address,
@@ -76,7 +102,9 @@ export const StateContextProvider = ({children}) => {
             connect,
             createCampaign: publishCampaign,
             getCampaigns,
-            getUserCampaigns
+            getUserCampaigns,
+            donate,
+            getDonations
         
         }}
             >
