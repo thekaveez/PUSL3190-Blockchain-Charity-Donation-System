@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { ethers } from 'ethers'
 
 import { useStateContext } from '../context'
-import { CustomButton, CountBox, Loader } from '../components'
+import { CustomButton, CountBox, Loader, SocialShare } from '../components'
 import { calculateBarPercentage,daysLeft } from '../utils'
 import {thirdweb} from '../assets'
 
@@ -160,22 +160,37 @@ const CampaignDetails = () => {
                 onChange={(e) => setAmount(e.target.value)}
                 />
 
-                <div className='my-[20px] p-4 bg-[#acfd98]
-                rounded-[10px]'>
+             
+
+                <div className={`my-[20px] p-4 ${remainingDays <= 0 ? 'bg-[#f56863]' : 'bg-[#acfd98]'} 
+                rounded-[10px]`}>
                   <p className='font-epilogue font-normal
-                  leading-[22px] text-center'>Your contribution can make a powerful impact.</p>
+                  leading-[22px] text-center'> {remainingDays <= 0 ? 'Time exeeded of this campaign. You can\'t donate anymore to this campaign.' : 'Your contribution can make a powerful impact.'}</p>
                 </div>
 
+                {/* $(remainingDays <= 0 ? #f0f8de : #e9faedfd) */}
+
+                {/* #acfd98 */}
+          
+                {remainingDays <= 0 ? null : (
                 <CustomButton 
                 btnType='button'
                 title='Fund Campaign'
                 styles='w-full bg-[#1dc071] '
                 handleClick={handleDonate}
+                disabled={remainingDays <= 0 ? true : false}
                 />
+                )}
               </div>
             </div>
+            <div className='mt-[20px]'>
+              {remainingDays <= 0 ? null : (
+          <SocialShare />
+              )}
+        </div>
 
         </div>
+       
       </div>
     </div>
   )

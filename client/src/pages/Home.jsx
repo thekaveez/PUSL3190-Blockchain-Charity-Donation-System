@@ -7,6 +7,8 @@ import { useStateContext } from "../context";
 const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [campaigns, setCampaigns] = useState([]);
+  
+  // const [searchQuery, setSearchQuery] = useState("");
 
   const { address, contract, getCampaigns } = useStateContext();
 
@@ -16,6 +18,14 @@ const Home = () => {
     setCampaigns(data);
     setIsLoading(false);
   };
+
+  // const handleSearchChange = (e) => {
+  //   setSearchQuery(e.target.value);
+  // };
+
+  // const filteredCampaigns = campaigns.filter((campaign) => {
+  //    campaign.title.toLowerCase().includes(searchQuery.toLowerCase());
+  // });
 
   useEffect(() => {
     if (contract) fetchCampaigns();

@@ -10,11 +10,10 @@ import { navlinks } from "../constants";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const [isActive, setIsActive] = useState("dashboard");
+  const [isActive, setIsActive] = useState("Home");
   const [toggleDrawer, setToggleDrawer] = useState(false);
 
   const { connect, address } = useStateContext();
-
 
   return (
     <div className="flex md:flex-row flex-col-reverse justify-between mb-[35px] gap-6">
@@ -28,7 +27,7 @@ const Navbar = () => {
           placeholder="Search for campaigns"
           className="flex w-full font-epilogue font-normal text-[14px] placeholder:text-[#77948f] text-black bg-transparent outline-none"
         />
-        <div className="w-[72px] h-full rounded-[20px] bg-[#4acd8d] flex justify-center items-center cursor-pointer">
+        <div className="w-[72px] h-full rounded-[20px] bg-[#4acd8d] flex justify-center items-center cursor-pointer" >
           <img
             src={search}
             alt="search"

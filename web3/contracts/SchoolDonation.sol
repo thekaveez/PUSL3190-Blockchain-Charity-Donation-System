@@ -14,7 +14,12 @@ contract SchoolDonation {
         uint256[] donations;
     }
 
+
+
+
+
     mapping(uint256 => Campaign) public campaigns;
+
 
     uint256 public numberofCampaigns = 0;
 
