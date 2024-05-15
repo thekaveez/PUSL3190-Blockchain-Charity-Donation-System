@@ -5,6 +5,7 @@ import { logo, thirdweb} from "../assets";
 
 import {navlinks} from "../constants"
 
+
 const Icon = ({ styles, name, imgUrl, isActive, disabled, handleClick }) => {
     return (
     <div
@@ -29,9 +30,13 @@ const Icon = ({ styles, name, imgUrl, isActive, disabled, handleClick }) => {
     );
   };
 
-const Menu = () => {
+const Menu = ({isAdmin, address}) => {
     const navigate = useNavigate();
     const [isActive, setIsActive] = useState("dashboard");
+
+    const filteredNavLinks = isAdmin && address ? navlinks : navlinks.filter(link => link.name !== "Admin" && link.name !== "Create Campaign");
+
+
   return (
     <div className="flex justify-between items-center sticky top-5">
       <Link to="/">
@@ -40,7 +45,7 @@ const Menu = () => {
 
       <div className="flex flex-row justify-between items-center">
          <ul className="flex">
-        {navlinks.map((link) => (
+        {filteredNavLinks.map((link) => (
           <li
             key={link.name}
             className={`flex p-4 ${isActive === link.name && 'bg-[#3a3a43'} cursor-pointer`}

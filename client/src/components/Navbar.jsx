@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { logo, search, thirdweb, menu } from "../assets";
@@ -13,12 +13,39 @@ const Navbar = () => {
   const [isActive, setIsActive] = useState("Home");
   const [toggleDrawer, setToggleDrawer] = useState(false);
 
-  const { connect, address } = useStateContext();
+  const { connect, address, getAdmin, isWhitelistedAddress } = useStateContext();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isAdmin, setAdmin] = useState(false);
+
+  const [isWhitelisted, setIsWhitelisted] = useState(false)
+
+
+ 
+    const fetchRoll = async () => {
+      const adminAddress = await getAdmin();
+      const str = adminAddress.toString();
+      if (address === str) {
+        setAdmin(true);
+      }
+  
+      const isWhitelist = await isWhitelistedAddress(address);
+      setIsWhitelisted(isWhitelist);
+
+    };
+
+    useEffect(()=>{
+      fetchRoll();
+    
+    },[address,isAdmin,isWhitelisted])
+  
 
   return (
     <div className="flex md:flex-row flex-col-reverse justify-between mb-[35px] gap-6">
       <div className="sm:flex hidden mr-10 relative">
-        <Menu />
+        <Menu 
+        isAdmin={isAdmin}
+        address={address}
+        />
       </div>
 
       <div className="lg:flex-1 flex flex-row max-w-[458px] py-2 pl-4 pr-2 h-[52px] bg-[#e9faedfd] rounded-[100px]">
@@ -36,7 +63,7 @@ const Navbar = () => {
         </div>
       </div>
       <div className="sm:flex hidden flex-row justify-end gap-4">
-        <CustomButton
+       { isWhitelisted ? <CustomButton
           btnType="button"
           title={address ? "Create a Campaign" : "Connect"}
           styles={address ? "bg-[#1dc071]" : "bg-[#8c6dfd]"}
@@ -47,7 +74,19 @@ const Navbar = () => {
               connect();
             }
           }}
-        />
+        /> :
+        <CustomButton
+          btnType="button"
+          title={address ? `${address}`: "Connect"}
+          styles={address ? "bg-[#b881d4]  text-black truncate w-[300px]" : "bg-[#8c6dfd]"}
+          handleClick={() => {
+            if (address) {
+              navigate("/");
+            } else {
+              connect();
+            }
+          }}
+        />}
 
         <Link to="/profile">
           <div className="w-[52px] h-[52px] rounded-full bg-[#e9faedfd] flex justify-center items-center cursor-pointer">

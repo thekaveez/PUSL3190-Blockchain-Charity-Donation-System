@@ -12,9 +12,11 @@ const Home = () => {
 
   const { address, contract, getCampaigns } = useStateContext();
 
+
   const fetchCampaigns = async () => {
     setIsLoading(true);
     const data = await getCampaigns();
+   console.log(data);
     setCampaigns(data);
     setIsLoading(false);
   };
@@ -38,6 +40,9 @@ const Home = () => {
       campaigns={campaigns}
     />
   );
+
+
 };
+
 
 export default Home;

@@ -18,10 +18,9 @@ export const navlinks = [
   //   disabled: true,
   // },
   // {
-  //   name: 'withdraw',
+  //   name: 'etherscan',
   //   imgUrl: withdraw,
-  //   link: '/',
-  //   disabled: true,
+  //   link: 'https://sepolia.etherscan.io/address/0xb91cab08E609A4e40dEe4B8d29F5A898Ab9a1020',
   // },
   {
     name: 'Profile',
@@ -33,6 +32,7 @@ export const navlinks = [
     name: 'Admin',
     imgUrl: profile,
     link: '/admin',
+    isAdmin:true
   },
   // {
   //   name: 'logout',

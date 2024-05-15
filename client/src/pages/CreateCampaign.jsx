@@ -64,9 +64,6 @@ const CreateCampaign = () => {
       }
     });
 
-    
-
-
   };
 
   return (

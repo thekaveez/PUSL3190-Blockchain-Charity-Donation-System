@@ -20,3 +20,12 @@ export const checkIfImage = (url, callback) => {
     img.onload = () => callback(true);
     img.onerror = () => callback(false);
   };
+
+// export const checkIfAdmin = async (address, getAdmin, setAdmin) => {
+//   const adminAddress = await getAdmin
+//   const str =  adminAddress.toString();
+//       if(address === str){
+//       setAdmin(true);
+//       }
+//     return setAdmin;
+//   };

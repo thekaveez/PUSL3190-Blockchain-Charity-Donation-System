@@ -12,20 +12,16 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 
 import { loader } from "../assets";
 
-const DisplayCampaigns = ({ isLoading, campaigns }) => {
- 
+const DisplayUsers = ({ isLoading, campaigns, handleDelete }) => {
+
   const columns = [
     { id: "no", label: "No", minWidth: 170 },
-    { id: "owner", label: "Owner", minWidth: 170 },
-    {
-      id: "title",
-      label: "Title",
-      minWidth: 170,
-      align: "left",
-    },
+    { id: "owner", label: "Address", minWidth: 170 },
     {
       id: "action",
       label: "Action",
@@ -34,27 +30,23 @@ const DisplayCampaigns = ({ isLoading, campaigns }) => {
     },
   ];
 
-  function createData(no, owner, title, action) {
-    return { no, owner, title, action };
-  }
-
-  const activeCampaigns = campaigns.filter(campaign => campaign.isActive);
+//   const activeCampaigns = campaigns.filter(campaign => campaign.isActive);
 
   const renderRows = () => {
-    if (!isLoading && activeCampaigns.length > 0) {
-      return activeCampaigns.map((campaign, index) => (
+    if (!isLoading && campaigns.length > 0) {
+        
+      return campaigns.map((address, index) => (
         <TableRow hover role="checkbox" tabIndex={-1} key={uuidv4()}>
           <TableCell>{index + 1}</TableCell>
-          <TableCell>{campaign.owner}</TableCell>
-          <TableCell align="left">{campaign.title}</TableCell>
+          <TableCell>{address.value}</TableCell>
           <TableCell align="right">
             <IconButton
-              onClick={() => handleView(campaign)}
+              onClick={() => handleDelete(address.value)}
               aria-label="view"
               size="small"
-              sx={{ color: "primary.main" }}
+              sx={{ color: "error.main" }}
             >
-              <VisibilityIcon />
+              <DeleteIcon />
             </IconButton>
           </TableCell>
         </TableRow>
@@ -66,9 +58,7 @@ const DisplayCampaigns = ({ isLoading, campaigns }) => {
 
   const navigate = useNavigate();
 
-  const handleView = (campaign) => {
-    navigate(`/campaign-details/${campaign.title}`, { state: campaign });
-  };
+
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -135,4 +125,4 @@ const DisplayCampaigns = ({ isLoading, campaigns }) => {
   );
 };
 
-export default DisplayCampaigns;
+export default DisplayUsers;

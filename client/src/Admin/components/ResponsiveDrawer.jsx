@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -17,6 +17,10 @@ import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import CampaignIcon from '@mui/icons-material/LocalLibrary';
+import UserIcon from '@mui/icons-material/Person';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 import { navlinks } from '../constants'
 
@@ -30,6 +34,8 @@ function ResponsiveDrawer() {
   const [isClosing, setIsClosing] = React.useState(false);
 
   const navigate = useNavigate();
+  const location = useLocation();
+
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -59,10 +65,14 @@ function ResponsiveDrawer() {
             handleDrawerClose();
           
           }}
+          sx={{ backgroundColor: location.pathname === link.link ? "lightblue" : "inherit" }}
           >
             <ListItemButton>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              {index === 0 && <DashboardIcon />}
+              {index === 1 && <CampaignIcon />}
+              {index === 2 && <UserIcon />}
+              {index === 3 && <LogoutIcon />}
               </ListItemIcon>
               <ListItemText primary={link.name} />
             </ListItemButton>
@@ -97,7 +107,7 @@ function ResponsiveDrawer() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Admin Panel
+            Admin
           </Typography>
         </Toolbar>
       </AppBar>

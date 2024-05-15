@@ -10,12 +10,26 @@ import {thirdweb} from '../assets'
 const CampaignDetails = () => {
   const { state } = useLocation()
   const navigate = useNavigate()
-  const {donate, getDonations, contract, address} = useStateContext()
+  const {donate, getDonations, contract, address, getAdmin, deleteCampaign} = useStateContext()
   // console.log(state)
 
   const[isLoading, setIsLoading] = useState(false)
   const[amount, setAmount] = useState('')
   const[donators, setDonators] = useState([])
+
+  const [isAdmin, setAdmin] = useState(false);
+
+ 
+    const fetchRoll = async () => {
+      const adminAddress = await getAdmin();
+      const str = adminAddress.toString();
+      if (address === str) {
+        setAdmin(true);
+      }
+    };
+  
+  
+  fetchRoll();
 
   const remainingDays = daysLeft(state.deadline)
 
@@ -33,6 +47,12 @@ const CampaignDetails = () => {
     setIsLoading(true);
     await donate(state.cId, amount);
 
+    navigate('/')
+    setIsLoading(false);
+  }
+  const handleDelete = async () => {
+    setIsLoading(true);
+    await deleteCampaign(state.cId);
     navigate('/')
     setIsLoading(false);
   }
@@ -133,6 +153,12 @@ const CampaignDetails = () => {
                 </p>
               
                 )}
+
+                <a href="https://sepolia.etherscan.io/address/0xb91cab08E609A4e40dEe4B8d29F5A898Ab9a1020" target='_blank'>
+
+                <p className='font-epilogue text-[14px] text-[#4649ec] underline'>More Details...</p>
+                </a>
+
    
             </div>
           </div>
@@ -188,10 +214,23 @@ const CampaignDetails = () => {
           <SocialShare />
               )}
         </div>
+        
 
         </div>
        
       </div>
+      {isAdmin && address && 
+      <div className='flex mt-[30px] justify-center'>
+      <CustomButton 
+              btnType='button'
+              title='Delete Campaign'
+              styles='w-1/2 bg-[#FF0000] '
+              handleClick={handleDelete}
+              disabled={remainingDays <= 0 ? true : false}
+              />
+      </div>
+      }
+      
     </div>
   )
 }
